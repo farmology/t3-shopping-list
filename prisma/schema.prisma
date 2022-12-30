@@ -15,10 +15,10 @@ datasource db {
   relationMode = "prisma"
 }
 
-model Example {
+model ShoppingItem {
   id        String   @id @default(cuid())
   name      String
-  checked   Boolean
+  checked   Boolean  @default(false)
 }
 
 // Necessary for Next auth
