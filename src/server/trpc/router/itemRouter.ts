@@ -14,5 +14,11 @@ export const itemRouter = router({
                 },
             })
             return item
-        })
-})
+        }),
+    getAllItems: publicProcedure
+        .query( async ({ ctx }) => {
+            const items = await ctx.prisma.shoppingItem.findMany()
+            return items
+    
+        }),
+    })
