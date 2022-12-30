@@ -4,9 +4,17 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import { trpc } from "../utils/trpc";
+import { useState } from "react";
+import { ShoppingItem } from "@prisma/client";
 
 const Home: NextPage = () => {
+  const [items, setItems] = useState<ShoppingItem[]>([]); 
   const hello = trpc.example.hello.useQuery({ text: "from Earth" });
+  const {} = trpc.item.addItem.useMutation({
+    onSuccess: (item) => {
+      setItems((prev) => [...prev, item])
+    },
+  });
 
   return (
     <>
