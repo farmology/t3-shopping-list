@@ -16,7 +16,8 @@ const Home: NextPage = () => {
       setItems((prev) => [...prev, item])
     },
   });
-
+  const { data: itemsData, isLoading } = trpc.item.getAllItems.useQuery();
+  if (!itemsData || isLoading) return <p>Loading...</p>
   return (
     <>
       <Head>
@@ -37,6 +38,13 @@ const Home: NextPage = () => {
                 Add item</button>
           </form>
           <div className="flex flex-col items-center gap-2">
+            <ul className="text-white">
+              {itemsData.map((item) => (
+                <li key={item.id}>
+                  <span>{item.name}</span>
+                </li>
+              ))}
+            </ul>
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
             </p>
