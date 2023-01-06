@@ -16,7 +16,7 @@ const Home: NextPage = () => {
       setItems((prev) => [...prev, item])
     },
   });
-  const { data: itemsData, isLoading } = trpc.item.getAllItems.useQuery('items', {
+  const { data: itemsData, isLoading } = trpc.item.getAllItems.useQuery(['items'], {
     onSuccess: (itemsData) => {
       setItems(itemsData)
     },

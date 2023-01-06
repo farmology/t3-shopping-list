@@ -21,4 +21,17 @@ export const itemRouter = router({
             return items
     
         }),
+    deleteItem: publicProcedure
+        .input(z.object({
+            id: z.string(),
+        }))
+        .mutation( async ({ input, ctx }) => {
+            const { id } = input
+            const item = await ctx.prisma.shoppingItem.delete({
+                where: {
+                    id,
+                },
+            })
+            return item
+        } ),
     })
