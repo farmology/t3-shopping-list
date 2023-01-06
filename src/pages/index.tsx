@@ -6,6 +6,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { trpc } from "../utils/trpc";
 import { SetStateAction, useState } from "react";
 import { ShoppingItem } from "@prisma/client";
+import {HiX} from 'react-icons/hi'
 
 const Home: NextPage = () => {
   const [input, setInput] = useState<string>('');
@@ -14,6 +15,11 @@ const Home: NextPage = () => {
   const { mutate: addItem } = trpc.item.addItem.useMutation({
     onSuccess: (item) => {
       setItems((prev) => [...prev, item])
+    },
+  });
+  const { mutate: deleteItem } = trpc.item.deleteItem.useMutation({
+    onSuccess: (shoppingItem) => {
+      setItems((prev) => prev.filter((item) => item.id !== shoppingItem.id))
     },
   });
   const { data: itemsData, isLoading } = trpc.item.getAllItems.useQuery(['items'], {
@@ -48,12 +54,16 @@ const Home: NextPage = () => {
                 Add item</button>
           </form>
           <div className="flex flex-col items-center gap-2">
-            <ul className="text-white">
-              {items.map((item) => (
-                <li key={item.id}>
-                  <span>{item.name}</span>
-                </li>
-              ))}
+            <ul className="text-white mt-4">
+              {items.map((item) => {
+                const { id, name } = item
+                return (
+                <li key={id} className='flex items-center justify-between'>
+                    <span>{name}</span>
+                    <HiX onClick={() => deleteItem({id})}/>
+                  </li>
+                )
+              })}
             </ul>
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
