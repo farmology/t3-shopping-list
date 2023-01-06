@@ -60,7 +60,7 @@ const Home: NextPage = () => {
                 return (
                 <li key={id} className='flex items-center justify-between'>
                     <span>{name}</span>
-                    <HiX onClick={() => deleteItem({id})}/>
+                    <HiX onClick={() => deleteItem({id})} className='cursor-pointer'/>
                   </li>
                 )
               })}
