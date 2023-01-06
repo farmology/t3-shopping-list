@@ -22,6 +22,11 @@ const Home: NextPage = () => {
       setItems((prev) => prev.filter((item) => item.id !== shoppingItem.id))
     },
   });
+  // const { mutate: checkItem } = trpc.item.checkItem.useMutation({
+  //   onSuccess: (shoppingItem) => {
+  //     setItems((prev) => prev.filter((item) => item.id !== shoppingItem.id))
+  //   },
+  // });
   const { data: itemsData, isLoading } = trpc.item.getAllItems.useQuery(['items'], {
     onSuccess: (itemsData) => {
       setItems(itemsData)
