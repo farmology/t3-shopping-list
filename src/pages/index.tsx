@@ -8,9 +8,11 @@ import { SetStateAction, useState } from "react";
 import { ShoppingItem } from "@prisma/client";
 import {HiX} from 'react-icons/hi'
 
+
 const Home: NextPage = () => {
   const [input, setInput] = useState<string>('');
   const [items, setItems] = useState<ShoppingItem[]>([]); 
+  const [checkedItems, setCheckedItems] = useState<ShoppingItem[]>([]);
   const hello = trpc.example.hello.useQuery({ text: "from Earth" });
   const { mutate: addItem } = trpc.item.addItem.useMutation({
     onSuccess: (item) => {
@@ -22,14 +24,20 @@ const Home: NextPage = () => {
       setItems((prev) => prev.filter((item) => item.id !== shoppingItem.id))
     },
   });
-  // const { mutate: checkItem } = trpc.item.checkItem.useMutation({
-  //   onSuccess: (shoppingItem) => {
-  //     setItems((prev) => prev.filter((item) => item.id !== shoppingItem.id))
-  //   },
-  // });
+  const { mutate: toggleCheck } = trpc.item.toggleCheck.useMutation({
+    onSuccess: (shoppingItem) => {
+      if (checkedItems.some((item) => item.id === shoppingItem.id)) {
+        setCheckedItems((prev) => prev.filter((item) => item.id !== shoppingItem.id))
+      } else {
+        setCheckedItems((prev) => [...prev, shoppingItem])
+      }
+    },
+  });
   const { data: itemsData, isLoading } = trpc.item.getAllItems.useQuery(['items'], {
     onSuccess: (itemsData) => {
       setItems(itemsData)
+      const checked = itemsData.filter((item) => item.checked === true)
+      setCheckedItems(checked)
     },
   });
 
@@ -64,9 +72,15 @@ const Home: NextPage = () => {
                 const { id, name } = item
                 return (
                 <li key={id} className='flex items-center justify-between'>
-                    <span>{name}</span>
+                    <span 
+                      style={checkedItems.some((item) => item.id === id) ? {textDecoration: 'line-through'} : {}}
+                      onClick={() => toggleCheck({id, checked: items.some((item) => item.id === id)})} 
+                      className='cursor-pointer'
+                    >
+                      {name}
+                    </span>
                     <HiX onClick={() => deleteItem({id})} className='cursor-pointer'/>
-                  </li>
+                </li>
                 )
               })}
             </ul>

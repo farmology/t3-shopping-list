@@ -34,7 +34,7 @@ export const itemRouter = router({
             })
             return item
         } ),
-    checkItem: publicProcedure
+    toggleCheck: publicProcedure
         .input(z.object({
             id: z.string(),
             checked: z.boolean(),
