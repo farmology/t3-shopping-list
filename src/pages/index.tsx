@@ -39,7 +39,7 @@ const Home: NextPage = () => {
       }
     },
   });
-  const { data: itemsData, isLoading } = trpc.item.getAllItems.useQuery(['items'], {
+  const { data: itemsData, isLoading } = trpc.item.getAllItems.useQuery(undefined, {
     onSuccess: (itemsData) => {
       setItems(itemsData)
       const checked = itemsData.filter((item) => item.checked === true)
