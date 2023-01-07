@@ -13,7 +13,7 @@ const Home: NextPage = () => {
   const [input, setInput] = useState<string>('');
   const [items, setItems] = useState<ShoppingItem[]>([]); 
   const [checkedItems, setCheckedItems] = useState<ShoppingItem[]>([]);
-  const hello = trpc.example.hello.useQuery({ text: "from Earth" });
+  
   const { mutate: addItem } = trpc.item.addItem.useMutation({
     onSuccess: (item) => {
       setItems((prev) => [...prev, item])
@@ -57,7 +57,7 @@ const Home: NextPage = () => {
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            <span className="text-[hsl(280,100%,70%)]">Shopping</span> List
+            <span className="text-[hsl(280,100%,70%)]">Shopping List</span>
           </h1>
           <form onSubmit={handleSubmit}>
             <input type='text' value={input} onChange={(e) => setInput(e.target.value)} />
@@ -67,7 +67,7 @@ const Home: NextPage = () => {
                 Add item</button>
           </form>
           <div className="flex flex-col items-center gap-2">
-            <ul className="text-white mt-4">
+            <ul className="text-white text-3xl">
               {items.map((item) => {
                 const { id, name } = item
                 return (
@@ -84,10 +84,12 @@ const Home: NextPage = () => {
                 )
               })}
             </ul>
-            <p className="text-2xl text-white">
-              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
-            </p>
-            <AuthShowcase />
+            <button  
+              className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20 mt-6" 
+              onClick={() => addItem({ name: input })}>
+                Clear All
+            </button>
+            
           </div>
         </div>
       </main>
