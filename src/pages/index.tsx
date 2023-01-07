@@ -4,7 +4,7 @@ import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 import { trpc } from "../utils/trpc";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import { ShoppingItem } from "@prisma/client";
 import {HiX} from 'react-icons/hi'
 
@@ -22,6 +22,12 @@ const Home: NextPage = () => {
   const { mutate: deleteItem } = trpc.item.deleteItem.useMutation({
     onSuccess: (shoppingItem) => {
       setItems((prev) => prev.filter((item) => item.id !== shoppingItem.id))
+    },
+  });
+  const { mutate: deleteAllItems } = trpc.item.deleteAllItems.useMutation({
+    onSuccess: (items) => {
+      setItems([])
+      setCheckedItems([])
     },
   });
   const { mutate: toggleCheck } = trpc.item.toggleCheck.useMutation({
@@ -86,7 +92,7 @@ const Home: NextPage = () => {
             </ul>
             <button  
               className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20 mt-6" 
-              onClick={() => addItem({ name: input })}>
+              onClick={() => deleteAllItems()}>
                 Clear All
             </button>
             
