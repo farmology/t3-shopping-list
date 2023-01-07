@@ -51,4 +51,9 @@ export const itemRouter = router({
             })
         return item
     } ),
+    deleteAllitems: publicProcedure
+        .mutation( async ({ ctx }) => {
+            const item = await ctx.prisma.shoppingItem.deleteMany({})
+        return item
+         } ),
     })
